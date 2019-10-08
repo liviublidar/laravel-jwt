@@ -13,7 +13,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -60,12 +59,17 @@ class AuthController extends Controller
 
     protected function respondWithToken($token, $user = null)
     {
-        return response()->json([
-            'user' => $user,
+        $authResponsePayload = [
             'access_token' => $token,
             'token_type'   => 'bearer',
             'expires_in'   => auth()->factory()->getTTL() * 60
-        ], 201);
+        ];
+
+        if(!empty($user)){
+            $authResponsePayload['user'] = $user;
+        }
+
+        return response()->json($authResponsePayload, 201);
     }
 
     private function getAuthenticatedUser()
