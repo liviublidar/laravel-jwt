@@ -68,7 +68,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function getAuthenticatedUser()
+    private function getAuthenticatedUser()
     {
         try {
 
