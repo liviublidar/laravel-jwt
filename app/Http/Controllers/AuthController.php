@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Account;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -14,7 +15,10 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'dob' => 'required|date|max:255',
+            'code' => 'required|string|max:64',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -23,10 +27,16 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
+        $accountId = Account::getAccountIdFromCode($request->get('code'));
+
         $user = User::create([
-            'name' => $request->get('name'),
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'dob' => $request->get('dob'),
             'email'    => $request->email,
             'password' => $request->password,
+            'suspended' => 0,
+            'account_id' => $accountId,
         ]);
 
         $token = JWTAuth::fromUser($user);
@@ -95,5 +105,10 @@ class AuthController extends Controller
         }
 
         return response()->json(compact('user'));
+    }
+
+    public function getUser()
+    {
+        return $this->getAuthenticatedUser();
     }
 }

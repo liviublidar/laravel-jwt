@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
-class ArticlesTableSeeder extends Seeder
+class AccountsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +10,6 @@ class ArticlesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\User::class, 30)->create();
+        factory(App\Account::class, 30)->create();
     }
 }

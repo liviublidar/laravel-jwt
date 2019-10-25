@@ -12,7 +12,7 @@ class AuthTest extends TestCase
 {
     public function testLoginReturnsValidToken(){
         $loginPayLoad = [
-            'email' => 'test@email.com',
+            'email' => 'test6@email.com',
             'password' => 'secretpwd'
         ];
 
@@ -30,11 +30,11 @@ class AuthTest extends TestCase
             ->assertJsonStructure($expectedLoginResponseStructure);
     }
 
-    public function testOnlyTokenUsersCanSeePrivateApi()
+    public function tokenUsersCanSeePrivateApi()
     {
-        $testUserEmail = 'test@email.com';
+        $testUserEmail = 'test6@email.com';
         $user = User::where('email',$testUserEmail)->first();
-        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+        $token = JWTAuth::fromUser($user);
 
         $privateEndpointCheckPayload = [
             'token' => $token
