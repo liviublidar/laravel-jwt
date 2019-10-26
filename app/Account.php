@@ -11,7 +11,6 @@ class Account extends Model
     {
         $row = Account::where('code', $code)->pluck('id')->first();
         return $row;
-
     }
 
     public static function getRandomAccount($suspended = null)
