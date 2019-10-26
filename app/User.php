@@ -55,4 +55,11 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
+    public static function getRandomUser()
+    {
+        $row = User::all()->random();
+        return $row;
+
+    }
+
 }

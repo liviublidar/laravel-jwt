@@ -12,4 +12,10 @@ class Account extends Model
         return $row;
 
     }
+
+    public static function getRandomAccount()
+    {
+        $row = Account::all('id', 'name', 'code')->random();
+        return $row;
+    }
 }

@@ -23,11 +23,14 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
         $accountId = Account::getAccountIdFromCode($request->get('code'));
+        if(!$accountId || !is_numeric($accountId)) {
+            return response()->json('Organization code is not valid', 400);
+        }
 
         $user = User::create([
             'first_name' => $request->get('first_name'),
