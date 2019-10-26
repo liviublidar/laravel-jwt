@@ -30,6 +30,7 @@ class JwtMiddleware extends BaseMiddleware
                 return response()->json(['status' => 'Authorization Token not found'],401);
             }
         }
+        $request->user = $user;
         return $next($request);
     }
 }

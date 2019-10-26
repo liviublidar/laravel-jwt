@@ -20,15 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
-Route::post('/logout', 'AuthController@logout');
-
-
 
 Route::get('open', 'TestController@open');
 
-Route::group(['middleware' => ['jwt.verify']], function() {
+Route::group(['middleware' => ['jwt.verify', 'suspended']], function() {
     Route::get('user', 'UserController@getAuthenticatedUser');
     Route::get('closed', 'TestController@closed');
+    Route::post('/logout', 'AuthController@logout');
 });
 
 

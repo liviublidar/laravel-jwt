@@ -20,7 +20,7 @@ class AuthTest extends TestCase
      */
     public function testValidRegisterSucceeds()
     {
-        $randomAccount = Account::getRandomAccount();
+        $randomAccount = Account::getRandomAccount(false);
         $randomAccountCode = $randomAccount->code;
         $randomAccountId = $randomAccount->id;
 
@@ -139,7 +139,7 @@ class AuthTest extends TestCase
      */
     public function testTokenUsersCanSeePrivateApi()
     {
-        $user = User::getRandomUser();
+        $user = User::getRandomUser(false);
         $token = JWTAuth::fromUser($user);
 
         $privateEndpointCheckPayload = [
@@ -189,4 +189,31 @@ class AuthTest extends TestCase
         $response = $this->json('GET','/api/closed', $privateEndpointCheckPayload);
         $response->assertStatus(401);
     }
+
+    public function testSuspendedUsersAreBlocked()
+    {
+        $user = User::getRandomUser(true);
+        $token = JWTAuth::fromUser($user);
+        $privateEndpointCheckPayload = [
+            'token' => $token
+        ];
+
+        $response = $this->json('GET','/api/closed', $privateEndpointCheckPayload);
+        $response->assertStatus(403);
+    }
+
+    public function testSuspendedAccountUsersAreBlocked()
+    {
+        $randomSuspendedAccount = Account::getRandomAccount(true);
+        $user = User::getRandomUserFromAccountId($randomSuspendedAccount->id, false);
+        $token = JWTAuth::fromUser($user);
+        $privateEndpointCheckPayload = [
+            'token' => $token
+        ];
+
+        $response = $this->json('GET','/api/closed', $privateEndpointCheckPayload);
+        $response->assertStatus(403);
+    }
+
+
 }
