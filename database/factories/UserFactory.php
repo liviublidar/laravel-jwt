@@ -26,7 +26,6 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'account_id' => random_int(1, 199),
         'suspended' => (int) $faker->boolean(50),
-        'dob' => Carbon::now()->subMinutes(rand(1, 55)),
-        //'remember_token' => Str::random(10),
+        'dob' => Carbon::now()->subMinutes(rand(1, 55))
     ];
 });

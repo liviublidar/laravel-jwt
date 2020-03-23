@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->boolean('suspended');
             $table->bigInteger('account_id')->unsigned()->index();
-            //$table->rememberToken();
             $table->timestamps();
         });
 
